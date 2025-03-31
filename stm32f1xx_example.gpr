@@ -1,0 +1,101 @@
+with "stm32f1xx_hal";
+
+project STM32F1xx_Example is
+
+   for Languages use ("Ada", "ASM_CPP");
+
+   for Target use "arm-elf";
+   for Runtime ("Ada") use "light-cortex-m3";
+
+   for Source_Dirs use
+      ("src/",
+       "src/startup/");
+   for Object_Dir use "obj/";
+   for Create_Missing_Dirs use "True";
+   for Exec_Dir use "bin";
+   for Main use ("stm32f1xx_example.adb");
+
+   -- Callgraph_Switch := ("-fcallgraph-info=su", "-gnatQ");
+   Linker_Switches := ("-T", Project'Project_Dir & "/src/startup/link.ld");
+
+   package Device_Configuration is
+      for CPU_Name use "ARM Cortex-M3";
+      for Float_Handling use "soft";
+      for Number_Of_Interrupts use "43";
+
+      for Memories use ("flash", "ram");
+
+      for Mem_Kind ("ram") use "ram";
+      for Address ("ram") use "0x20000000";
+      for Size ("ram") use "20K";
+
+      for Mem_Kind ("flash") use "rom";
+      for Address ("flash") use "0x08000000";
+      for Size ("flash") use "64K";
+
+      for Boot_Memory use "flash";
+   end Device_Configuration;
+
+   type Enabled_Kind is ("enabled", "disabled");
+   Compile_Checks : Enabled_Kind := External ("COMPILE_CHECKS", "disabled");
+   Style_Checks : Enabled_Kind := External ("STYLE_CHECKS", "enabled");
+
+   type Build_Kind is ("debug", "optimize");
+   Build_Mode : Build_Kind := External ("BUILD_MODE", "optimize");
+
+   Compile_Checks_Switches := ();
+   case Compile_Checks is
+      when "enabled" =>
+         Compile_Checks_Switches :=
+           ("-gnatwa",  -- All warnings
+            "-gnatVa",  -- All validity checks
+            "-gnatwe"); -- Warnings as errors
+      when others => null;
+   end case;
+
+   Style_Checks_Switches := ();
+   case Style_Checks is
+      when "enabled" => null;
+         Style_Checks_Switches :=
+           ("-gnatyg",   -- GNAT Style checks
+            "-gnaty-d",  -- Disable no DOS line terminators
+            "-gnatyM120", -- Maximum line length
+            "-gnatyO");  -- Overriding subprograms explicitly marked as such
+      when others => null;
+   end case;
+
+   Build_Switches := ();
+   case Build_Mode is
+      when "optimize" =>
+         Build_Switches := ("-Os",
+                            "-gnatn");
+      when "debug" =>
+         Build_Switches := ("-Og",
+                            "-g3");
+   end case;
+
+   package Compiler is
+      for Default_Switches ("Ada") use
+         Compile_Checks_Switches &
+         Style_Checks_Switches &
+         Build_Switches &
+         ("-gnatwa",
+          "-gnatw_A",
+          "-gnatQ",
+          "-gnatw.X",
+          "-ffunction-sections",
+          "-fdata-sections");
+   end Compiler;
+
+   package Linker is
+      for Switches ("Ada") use
+         Linker_Switches &
+         ("-Wl,--print-memory-usage",
+          "-Wl,--gc-sections");
+   end Linker;
+
+   package Binder is
+      for Switches ("Ada") use ("-Es"); --  Symbolic traceback
+   end Binder;
+
+end STM32F1xx_Example;

@@ -1,0 +1,25 @@
+name = "stm32f1xx_example"
+description = ""
+version = "0.1.0-dev"
+
+authors = ["Your Name"]
+maintainers = ["Your Name <example@example.com>"]
+maintainers-logins = ["github-username"]
+licenses = "MIT OR Apache-2.0 WITH LLVM-exception"
+website = ""
+tags = []
+
+[configuration.values]
+cortex_m.core = "m0"
+
+[gpr-externals]
+BUILD_MODE = ["debug", "optimize"]
+
+[gpr-set-externals]
+BUILD_MODE = "debug"
+
+[[depends-on]]
+stm32f1xx_hal = "~0.1.0-dev"
+
+[[pins]]
+stm32f1xx_hal = { path='../stm32f1xx_hal' }

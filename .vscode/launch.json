@@ -1,0 +1,22 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug",
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/bin/stm32f1xx_example",
+            "request": "launch",
+            "type": "cortex-debug",
+            "runToEntryPoint": "Stm32f1xx_Example",
+            "interface": "swd",
+            "armToolchainPath": "/home/haruspex/.local/share/alire/toolchains/gnat_arm_elf_14.2.1_524d4d41/bin/",
+            "gdbPath": "/home/haruspex/.local/share/alire/toolchains/gnat_arm_elf_14.2.1_524d4d41/bin/arm-eabi-gdb",
+            "servertype": "openocd",
+            "svdFile": "${workspaceFolder}/share/stm32f103.svd",
+            "configFiles": [
+                "${workspaceRoot}/openocd.cfg"
+            ]
+        }
+    ]
+}
+
