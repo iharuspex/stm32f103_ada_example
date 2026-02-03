@@ -10,7 +10,7 @@ website = ""
 tags = []
 
 [configuration.values]
-cortex_m.core = "m0"
+cortex_m.core = "m0" # Of course, that's wrong. It must be m3
 
 [gpr-externals]
 BUILD_MODE = ["debug", "optimize"]

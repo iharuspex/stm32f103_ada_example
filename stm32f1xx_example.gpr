@@ -13,7 +13,7 @@ project STM32F1xx_Example is
    for Object_Dir use "obj/";
    for Create_Missing_Dirs use "True";
    for Exec_Dir use "bin";
-   for Main use ("stm32f1xx_example.adb");
+   for Main use ("stm32f103_example.adb");
 
    -- Callgraph_Switch := ("-fcallgraph-info=su", "-gnatQ");
    Linker_Switches := ("-T", Project'Project_Dir & "/src/startup/link.ld");
